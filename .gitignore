@@ -23,3 +23,8 @@
 hs_err_pid*
 /.gradle/
 /.idea/
+/build/
+/application/build/
+/domain/build/
+/entrypoint/build/
+/infrastructure/build/

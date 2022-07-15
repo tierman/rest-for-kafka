@@ -4,3 +4,13 @@ include ':application'
 include ':domain'
 include ':entrypoint'
 include ':infrastructure'
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            library("junit-jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef("junitVersion")
+            library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").withoutVersion()
+            version('junitVersion', '5.8.2')
+        }
+    }
+}
