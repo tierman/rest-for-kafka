@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile:
-        - prod
+        - dev
 
 springdoc:
   api-docs:
@@ -11,4 +11,4 @@ springdoc:
   show-actuator: true
 
 server:
-  port: 8080
+  port: 8088
