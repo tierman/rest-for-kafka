@@ -1,4 +1,6 @@
 dependencies {
+    implementation libs.spring.web
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine
 }

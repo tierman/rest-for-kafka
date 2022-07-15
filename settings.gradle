@@ -10,11 +10,15 @@ dependencyResolutionManagement {
         libs {
             plugin('spring-boot', 'org.springframework.boot').versionRef('spring-boot-version')
             plugin('spring-dependency-management', 'io.spring.dependency-management').versionRef('spring-dependency-management-version')
+            library('spring-web', 'org.springframework', 'spring-web').versionRef('spring-version')
+            library('openapi', 'org.springdoc', 'springdoc-openapi-ui').versionRef('openapi-version')
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef('junit-version')
             library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").withoutVersion()
             version('junit-version', '5.8.2')
             version('spring-boot-version', '2.7.1')
             version('spring-dependency-management-version', '1.0.11.RELEASE')
+            version('spring-version', '5.3.21')
+            version('openapi-version', '1.6.9')
         }
     }
 }

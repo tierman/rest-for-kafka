@@ -1,0 +1,5 @@
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  show-actuator: true
