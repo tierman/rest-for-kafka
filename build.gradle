@@ -1,17 +1,27 @@
-plugins {
-    id 'java'
-}
+allprojects {
+    group 'pl.icreatesoftware'
+    version '0.0.1-SNAPSHOT'
 
-group 'pl.icreatesoftware'
-version '1.0-SNAPSHOT'
+    apply plugin: 'java'
 
-repositories {
-    mavenCentral()
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation project(':application')
+    implementation project(':domain')
+    implementation project(':entrypoint')
+    implementation project(':infrastructure')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {

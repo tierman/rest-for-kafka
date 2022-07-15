@@ -1,3 +1,6 @@
 rootProject.name = 'rest-for-kafka'
 
-include('application', 'domain', 'entrypoint', 'infrastructure')
+include ':application'
+include ':domain'
+include ':entrypoint'
+include ':infrastructure'
