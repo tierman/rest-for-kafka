@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation libs.avro
     compileOnly libs.avro.compiler
+    implementation libs.spring.kafka
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine

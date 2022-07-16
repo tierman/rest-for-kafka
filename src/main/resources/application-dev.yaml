@@ -3,6 +3,11 @@ spring:
     activate:
       on-profile:
         - dev
+  kafka:
+    bootstrap-servers: ${REST_FOR_KAFKA_BOOTSTRAP_SERVERS:'localhost:9092'}
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.UUIDSerializer
 
 springdoc:
   api-docs:
