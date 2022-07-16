@@ -10,8 +10,11 @@ dependencyResolutionManagement {
         libs {
             plugin('spring-boot', 'org.springframework.boot').versionRef('spring-boot-version')
             plugin('spring-dependency-management', 'io.spring.dependency-management').versionRef('spring-dependency-management-version')
+            plugin('avro-gradle-plugin', 'org.apache.avro.gradle:avro-gradle-plugin').versionRef('avro-gradle-plugin-version')
             library('spring-web', 'org.springframework', 'spring-web').versionRef('spring-version')
             library('openapi', 'org.springdoc', 'springdoc-openapi-ui').versionRef('openapi-version')
+            library('avro', 'org.apache.avro', 'avro').versionRef('avro-version')
+            library('avro-compiler', 'org.apache.avro', 'avro-compiler').versionRef('avro-version')
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef('junit-version')
             library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").withoutVersion()
             version('junit-version', '5.8.2')
@@ -19,6 +22,8 @@ dependencyResolutionManagement {
             version('spring-dependency-management-version', '1.0.11.RELEASE')
             version('spring-version', '5.3.21')
             version('openapi-version', '1.6.9')
+            version('avro-version', '1.11.0')
+            version('avro-gradle-plugin-version', '1.7.2')
         }
     }
 }

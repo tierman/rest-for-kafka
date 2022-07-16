@@ -1,4 +1,11 @@
+plugins {
+    alias(libs.plugins.avro.gradle.plugin)
+}
+
 dependencies {
+    implementation libs.avro
+    compileOnly libs.avro-compiler
+
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine
 }
