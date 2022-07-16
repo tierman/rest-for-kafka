@@ -1,5 +1,6 @@
 package pl.icreatesoftware.infrastructure;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ class KafkaProducerService {
 
     private final KafkaTemplate<UUID, String> kafkaTemplate;
 
+    @Autowired
     KafkaProducerService(KafkaTemplate<UUID, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
