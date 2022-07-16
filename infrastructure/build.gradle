@@ -4,10 +4,29 @@ plugins {
 
 dependencies {
     implementation libs.avro
-    compileOnly libs.avro-compiler
+    compileOnly libs.avro.compiler
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine
+}
+
+sourceSets {
+    main{
+        java {
+            srcDir 'src/main/java'
+            srcDir 'src/generated-main-avro-java/'
+        }
+    }
+}
+
+generateAvroJava {
+    source("src/main/resources/avro/schema/")
+}
+
+avro {
+    outputCharacterEncoding = "UTF-8"
+    gettersReturnOptional = true
+    createSetters = false
 }
 
 test {
