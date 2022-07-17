@@ -1,0 +1,11 @@
+${AnsiColor.BRIGHT_WHITE}    ______  _____  _____  _____    __                _   __  ___  ______  _   __  ___
+${AnsiColor.BRIGHT_WHITE}    | ___ \|  ___|/  ___||_   _|  / _|              | | / / / _ \ |  ___|| | / / / _ \
+${AnsiColor.BRIGHT_WHITE}    | |_/ /| |__  \ `--.   | |   | |_   ___   _ __  | |/ / / /_\ \| |_   | |/ / / /_\ \
+${AnsiColor.BRIGHT_RED}    |    / |  __|  `--. \  | |   |  _| / _ \ | '__| |    \ |  _  ||  _|  |    \ |  _  |
+${AnsiColor.BRIGHT_RED}    | |\ \ | |___ /\__/ /  | |   | |  | (_) || |    | |\  \| | | || |    | |\  \| | | |
+${AnsiColor.BRIGHT_RED}    \_| \_|\____/ \____/   \_/   |_|   \___/ |_|    \_| \_/\_| |_/\_|    \_| \_/\_| |_/
+
+${AnsiColor.BRIGHT_WHITE}   ${application.title} ${application.version}
+${AnsiColor.BRIGHT_GREEN}   Powered by Spring Boot ${spring-boot.version}
+
+${AnsiColor.BRIGHT_WHITE}
