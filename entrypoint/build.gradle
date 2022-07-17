@@ -1,4 +1,5 @@
 dependencies {
+    implementation project(':infrastructure')
     implementation libs.spring.web
 
     testImplementation libs.junit.jupiter
