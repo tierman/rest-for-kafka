@@ -6,6 +6,9 @@ dependencies {
     implementation libs.avro
     compileOnly libs.avro.compiler
     implementation libs.spring.kafka
+    implementation libs.kafka.avro.serializer
+    implementation libs.kafka.schema.registry.client
+    implementation libs.gson
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine

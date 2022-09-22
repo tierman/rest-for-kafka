@@ -6,8 +6,12 @@ spring:
   kafka:
     bootstrap-servers: ${REST_FOR_KAFKA_BOOTSTRAP_SERVERS:localhost\:29092}
     producer:
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       key-serializer: org.apache.kafka.common.serialization.UUIDSerializer
+      client-id: test-client-id
+    properties:
+      schema.registry.url: http://localhost:8888/
+
 
 springdoc:
   api-docs:

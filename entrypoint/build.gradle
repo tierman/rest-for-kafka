@@ -1,6 +1,9 @@
 dependencies {
     implementation project(':infrastructure')
+    implementation libs.avro
     implementation libs.spring.web
+    implementation libs.gson
+    implementation libs.lombok
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine

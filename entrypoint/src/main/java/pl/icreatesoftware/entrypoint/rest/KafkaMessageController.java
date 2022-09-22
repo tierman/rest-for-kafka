@@ -1,7 +1,9 @@
 package pl.icreatesoftware.entrypoint.rest;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.icreatesoftware.entrypoint.rest.dto.Employee;
 import pl.icreatesoftware.infrastructure.KafkaProducerService;
 
 import java.util.UUID;
@@ -17,13 +19,21 @@ class KafkaMessageController {
         this.producerService = producerService;
     }
 
-    @GetMapping("/index")
-    public String index() {
-        return "Greetings from Spring Boot!";
+    @PostMapping("/test-topic")
+    public void testTopicPublication(@RequestBody Employee employee1) {
+        pl.icreatesoftware.Employee employee = pl.icreatesoftware.Employee.newBuilder()
+                .setName(employee1.getName())
+                .setAge(employee1.getAge())
+                .build();
+        producerService.send(employee, UUID.randomUUID());
     }
 
-    @PostMapping("/test-topic")
-    public void testTopicPublication(@RequestBody String data) {
-        producerService.send(data, UUID.randomUUID());
+    @PostMapping("/topic/{topic}/client-id/{clientId}/send")
+    public void sendGenericMessage(@RequestParam String topic,
+            @RequestParam String clientId,
+            @RequestBody Gson data) {
+
+        producerService.sendGeneric(topic, clientId, data);
     }
+
 }

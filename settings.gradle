@@ -25,6 +25,10 @@ dependencyResolutionManagement {
             library('avro-compiler', 'org.apache.avro', 'avro-compiler').versionRef('avro-version')
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter-api").versionRef('junit-version')
             library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").withoutVersion()
+            library("gson", "com.google.code.gson", "gson").versionRef('gson-version')
+            library("kafka-schema-registry-client", "io.confluent", "kafka-schema-registry-client").versionRef('kafka-version')
+            library("kafka-avro-serializer", "io.confluent", "kafka-avro-serializer").versionRef('kafka-version')
+            library("lombok", "org.projectlombok", "lombok").versionRef("lombok-version")
             version('junit-version', '5.8.2')
             version('spring-boot-version', '2.7.1')
             version('spring-dependency-management-version', '1.0.11.RELEASE')
@@ -33,6 +37,10 @@ dependencyResolutionManagement {
             version('openapi-version', '1.6.9')
             version('avro-version', '1.11.0')
             version('avro-gradle-plugin-version', '1.3.0')
+            version('gson-version', '2.9.0')
+            version('kafka-version', '7.2.1')
+            version('lombok-version', '1.18.24')
+
         }
     }
 }

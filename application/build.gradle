@@ -1,8 +1,14 @@
 dependencies {
-    testImplementation libs.junit.jupiter
-    testRuntimeOnly libs.junit.engine
+    implementation project(':infrastructure')
+    implementation project(':entrypoint')
+
+    implementation libs.kafka.avro.serializer
+    implementation libs.kafka.schema.registry.client
+
+//    testImplementation libs.junit.jupiter
+//    testRuntimeOnly libs.junit.engine
 }
 
-test {
-    useJUnitPlatform()
-}
+//test {
+//    useJUnitPlatform()
+//}
