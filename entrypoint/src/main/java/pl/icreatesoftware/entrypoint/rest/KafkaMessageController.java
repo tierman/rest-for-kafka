@@ -1,6 +1,7 @@
 package pl.icreatesoftware.entrypoint.rest;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.icreatesoftware.entrypoint.rest.dto.Employee;
@@ -30,10 +31,18 @@ class KafkaMessageController {
 
     @PostMapping("/topic/{topic}/client-id/{clientId}/send")
     public void sendGenericMessage(@RequestParam String topic,
-            @RequestParam String clientId,
-            @RequestBody Gson data) {
+                                   @RequestParam String clientId,
+                                   @RequestBody String body) {
 
-        producerService.sendGeneric(topic, clientId, data);
+        JsonObject jo = JsonParser.parseString(body).getAsJsonObject();
+        producerService.sendGeneric(topic, clientId, jo);
     }
 
+    @PostMapping("/subject/{subject}/normalize/{normalize}/register")
+    public void registerSchemaOnSubject(@RequestParam String subject,
+                                        @RequestParam boolean normalize,
+                                        @RequestBody String body) {
+
+        producerService.registerSchema(subject, normalize, body);
+    }
 }

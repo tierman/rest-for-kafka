@@ -1,19 +1,17 @@
 package pl.icreatesoftware.infrastructure;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import io.confluent.kafka.schemaregistry.ParsedSchema;
+import io.confluent.kafka.schemaregistry.avro.AvroSchema;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.entities.Schema;
-import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import pl.icreatesoftware.Employee;
 
-import java.io.IOException;
-import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -30,7 +28,7 @@ public class KafkaProducerService {
         kafkaTemplate.send("topic1", key, toSend);
     }
 
-    public void sendGeneric(String topic, String clientId, Gson data) {
+    public void sendGeneric(String topic, String clientId, JsonObject data) {
         var key = UUID.randomUUID();
         var schemaUrl = "http://localhost:8888/";
         CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, 20);
@@ -44,16 +42,27 @@ public class KafkaProducerService {
             org.apache.avro.Schema schema = parser.parse(byVersion.getSchema());
             GenericRecord avroRecord = new GenericData.Record(schema);
 
+
             avroRecord.put("Name", "oooooo");
             avroRecord.put("Age", 111);
+            //avroRecord.p
 
             kafkaTemplate.send(topic, key, avroRecord);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         //kafkaTemplate.send("topic", key, );
         //kafkaTemplate.send("topic1", key, toSend);
+    }
+
+    public void registerSchema(String subject, boolean normalize, String schema) {
+        var schemaUrl = "http://localhost:8888/";
+        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, 20);
+        ParsedSchema parsedSchema = new AvroSchema(schema);
+        try {
+            registryClient.register(subject, parsedSchema, normalize);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

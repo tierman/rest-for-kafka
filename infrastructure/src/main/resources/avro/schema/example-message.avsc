@@ -1,11 +1,44 @@
 [
   {
+    "type": "record",
+    "namespace": "pl.icreatesoftware",
+    "name": "Address",
+    "fields": [
+      {"name": "city", "type": ["string", "null"]},
+      {"name": "creationDate", "type" : {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        }
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "pl.icreatesoftware",
+    "name": "ContactPhone",
+    "fields": [
+      {"name": "phoneType", "type": ["string", "null"]},
+      {"name": "numberStr", "type": ["string", "null"]},
+      {"name": "number", "type": ["long", "null"]},
+      {"name": "creationDate", "type" : {"type": "long", "logicalType": "timestamp-millis"}}
+    ]
+  },
+
+  {
     "type" : "record",
     "namespace" : "pl.icreatesoftware",
     "name" : "Employee",
     "fields" : [
-        { "name" : "Name" , "type" : "string" },
-        { "name" : "Age" , "type" : "int" }
+        { "name": "name" , "type" : "string" },
+        { "name": "age" , "type" : "int" },
+        { "name": "phone", "type": ["ContactPhone", "null"]},
+        { "name": "addresses", "type": {
+            "type": "array",
+            "items": "Address",
+            "name": "addressItem"
+          }
+        },
+        { "name": "email", "type": {"type": "array", "items": "string"}}
     ]
   }
 ]
