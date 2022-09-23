@@ -16,6 +16,7 @@ import pl.icreatesoftware.infrastructure.KafkaProducerService;
 
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -74,7 +75,7 @@ class KafkaMessageController {
         try {
             schemaId = producerService.registerSchema(subject, normalize, body);
         } catch (Exception ex) {
-            log.error(getExMessage(ex));
+            //log.error(getExMessage(ex));
             return ResponseEntity.internalServerError().body(getExMessage(ex));
         }
         return ResponseEntity.ok(schemaId);
@@ -82,8 +83,10 @@ class KafkaMessageController {
 
     private static String getExMessage(Exception ex) {
         if (ex.getMessage() == null || ex.getMessage().isEmpty() || ex.getMessage().isBlank()) {
-            return Arrays.stream(ex.getStackTrace()).limit(10).toString();
+            return Arrays.stream(ex.getStackTrace()).limit(10)
+                    .toList()
+                    .toString();
         }
-        return Arrays.stream(ex.getStackTrace()).limit(10).toString();//ex.getMessage();
+        return ex.getMessage();//ex.getMessage();
     }
 }
