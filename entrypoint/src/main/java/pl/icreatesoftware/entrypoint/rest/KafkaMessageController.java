@@ -3,16 +3,23 @@ package pl.icreatesoftware.entrypoint.rest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.icreatesoftware.entrypoint.rest.dto.Employee;
 import pl.icreatesoftware.infrastructure.KafkaProducerService;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 class KafkaMessageController {
 
     private final KafkaProducerService producerService;
@@ -41,8 +48,15 @@ class KafkaMessageController {
     }
 
     @Operation(summary = "Register a new scheme for the selected topic/subject")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Schema successfully registered."),
+            @ApiResponse(responseCode = "500",
+                    description = "Error when parsing schema.",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PostMapping("/subject/{subject}/normalize/{normalize}/register")
-    public void registerSchemaOnSubject(
+    public ResponseEntity<?> registerSchemaOnSubject(
             @Schema(type = "string",
                     description = "For envirnoment:<br> " +
                     "test - use topic/subject - 'test-topic-1'<br>" +
@@ -56,6 +70,20 @@ class KafkaMessageController {
             @Schema(type = "string", example = "Paste schema from avro file with no changes")
             @RequestBody String body) {
 
-        producerService.registerSchema(subject, normalize, body);
+        int schemaId = 0;
+        try {
+            schemaId = producerService.registerSchema(subject, normalize, body);
+        } catch (Exception ex) {
+            log.error(getExMessage(ex));
+            return ResponseEntity.internalServerError().body(getExMessage(ex));
+        }
+        return ResponseEntity.ok(schemaId);
+    }
+
+    private static String getExMessage(Exception ex) {
+        if (ex.getMessage() == null || ex.getMessage().isEmpty() || ex.getMessage().isBlank()) {
+            return Arrays.stream(ex.getStackTrace()).limit(10).toString();
+        }
+        return Arrays.stream(ex.getStackTrace()).limit(10).toString();//ex.getMessage();
     }
 }

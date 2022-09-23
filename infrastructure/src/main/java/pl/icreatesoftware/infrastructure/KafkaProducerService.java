@@ -55,14 +55,16 @@ public class KafkaProducerService {
         //kafkaTemplate.send("topic1", key, toSend);
     }
 
-    public void registerSchema(String subject, boolean normalize, String schema) {
+    public int registerSchema(String subject, boolean normalize, String schema) {
         var schemaUrl = "http://localhost:8888/";
         CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, 20);
         ParsedSchema parsedSchema = new AvroSchema(schema);
+        int schemaId;
         try {
-            registryClient.register(subject, parsedSchema, normalize);
+            schemaId = registryClient.register(subject, parsedSchema, normalize);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return schemaId;
     }
 }
