@@ -87,6 +87,6 @@ class KafkaMessageController {
                     .toList()
                     .toString();
         }
-        return ex.getMessage();//ex.getMessage();
+        return ex.getMessage();
     }
 }
