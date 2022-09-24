@@ -66,7 +66,7 @@ class KafkaMessageController {
         try {
             schemaId = producerService.registerSchema(subject, normalize, body);
         } catch (Exception ex) {
-            //log.error(getExMessage(ex));
+            log.error(getExMessage(ex));
             return ResponseEntity.internalServerError().body(getExMessage(ex));
         }
         return ResponseEntity.ok(schemaId);
@@ -93,6 +93,7 @@ class KafkaMessageController {
         try {
             json = producerService.createJsonBasedOnLatestSchemaInSubject(subject);
         } catch (Exception ex) {
+            log.error(getExMessage(ex));
             return ResponseEntity.internalServerError().body(getExMessage(ex));
         }
         return ResponseEntity.ok(json);
