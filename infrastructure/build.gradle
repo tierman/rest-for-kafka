@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.avro.gradle.plugin)
+        alias(libs.plugins.avro.gradle.plugin)
     alias(libs.plugins.spring.dependency.management)
 }
 
@@ -10,6 +10,8 @@ dependencies {
     implementation libs.kafka.avro.serializer
     implementation libs.kafka.schema.registry.client
     implementation libs.gson
+    implementation libs.lombok
+    annotationProcessor libs.lombok
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.engine
