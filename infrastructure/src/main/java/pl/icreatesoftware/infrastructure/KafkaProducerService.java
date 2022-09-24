@@ -13,6 +13,7 @@ import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.util.RandomData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -266,5 +267,30 @@ public class KafkaProducerService {
             throw new RuntimeException(e);
         }
         return schemaId;
+    }
+
+    public String createJsonBasedOnLatestSchemaInSubject(String topicName) {
+        var maxIdOfSchemVersion = 20;
+        var schemaUrl = "http://localhost:8888/";
+        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, maxIdOfSchemVersion);
+        topicName = modifyTopicNameIfNeeded(topicName);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            var latestVersion = registryClient.getAllVersions(topicName).stream().max(Comparator.naturalOrder()).get();
+            SchemaMetadata schemaMetadata = registryClient.getSchemaMetadata(topicName, latestVersion);
+            ParsedSchema parsedSchema = registryClient.getSchemaById(schemaMetadata.getId());
+            Schema schema = new Schema.Parser().parse(parsedSchema.toString());
+
+            Iterator<Object> it = new RandomData(schema, 1).iterator();
+
+            while (it.hasNext()) {
+                stringBuilder.append(it.next());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return stringBuilder.toString();
     }
 }

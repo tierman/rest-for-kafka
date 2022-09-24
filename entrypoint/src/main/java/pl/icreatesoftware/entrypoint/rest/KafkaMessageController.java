@@ -81,6 +81,32 @@ class KafkaMessageController {
         return ResponseEntity.ok(schemaId);
     }
 
+    @Operation(summary = "Get schema as json for the selected topic/subject")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Json successfully generated."),
+            @ApiResponse(responseCode = "500",
+                    description = "Error when parsing schema.",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
+    @GetMapping("/subject/{subject}/json")
+    public ResponseEntity<?> getRegisteredSchemaAsJsonForSubject(
+            @Schema(type = "string",
+                    description = "For envirnoment:<br> " +
+                            "test - use topic/subject - 'test-topic-1'<br>" +
+                            "prod - use topic/subject - 'topic-1'",
+                    example = "test-topic-1")
+            @RequestParam String subject) {
+
+        String json;
+        try {
+            json = producerService.createJsonBasedOnLatestSchemaInSubject(subject);
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(getExMessage(ex));
+        }
+        return ResponseEntity.ok(json);
+    }
+
     private static String getExMessage(Exception ex) {
         if (ex.getMessage() == null || ex.getMessage().isEmpty() || ex.getMessage().isBlank()) {
             return Arrays.stream(ex.getStackTrace()).limit(10)
