@@ -30,15 +30,6 @@ class KafkaMessageController {
         this.producerService = producerService;
     }
 
-    @PostMapping("/test-topic")
-    public void testTopicPublication(@RequestBody Employee employee1) {
-        pl.icreatesoftware.Employee employee = pl.icreatesoftware.Employee.newBuilder()
-                .setName(employee1.getName())
-                .setAge(employee1.getAge())
-                .build();
-        producerService.send(employee, UUID.randomUUID());
-    }
-
     @PostMapping("/topic/{topic}/client-id/{clientId}/send")
     public void sendGenericMessage(@RequestParam String topic,
                                    @RequestParam String clientId,

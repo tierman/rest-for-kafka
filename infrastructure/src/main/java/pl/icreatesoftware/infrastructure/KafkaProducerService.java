@@ -51,10 +51,6 @@ public class KafkaProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void send(Employee toSend, UUID key) {
-        kafkaTemplate.send("topic1", key, toSend);
-    }
-
     public void sendGeneric(String topicName, String clientId, JsonObject json) {
         var key = UUID.randomUUID();
         var maxIdOfSchemVersion = 20;
@@ -256,13 +252,15 @@ public class KafkaProducerService {
         return topic;
     }
 
-    public int registerSchema(String subject, boolean normalize, String schema) {
+    public int registerSchema(String topicName, boolean normalize, String schema) {
         var schemaUrl = "http://localhost:8888/";
         CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, 20);
         ParsedSchema parsedSchema = new AvroSchema(schema);
+        topicName = modifyTopicNameIfNeeded(topicName);
+
         int schemaId;
         try {
-            schemaId = registryClient.register(subject, parsedSchema, normalize);
+            schemaId = registryClient.register(topicName, parsedSchema, normalize);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -282,10 +280,8 @@ public class KafkaProducerService {
             ParsedSchema parsedSchema = registryClient.getSchemaById(schemaMetadata.getId());
             Schema schema = new Schema.Parser().parse(parsedSchema.toString());
 
-            Iterator<Object> it = new RandomData(schema, 1).iterator();
-
-            while (it.hasNext()) {
-                stringBuilder.append(it.next());
+            for (Object o : new RandomData(schema, 1)) {
+                stringBuilder.append(o);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
