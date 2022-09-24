@@ -30,6 +30,8 @@ class KafkaMessageController {
         this.producerService = producerService;
     }
 
+    @Operation(description = "<h2>Send message to the selected topic/subject</h2>",
+            summary = "Send message to the selected topic/subject")
     @PostMapping("/topic/{topic}/client-id/{clientId}/send")
     public void sendGenericMessage(@RequestParam String topic,
                                    @RequestParam String clientId,
@@ -39,7 +41,8 @@ class KafkaMessageController {
         producerService.sendGeneric(topic, clientId, jo);
     }
 
-    @Operation(summary = "Register a new scheme for the selected topic/subject")
+    @Operation(description = "<h2>Register a new scheme for the selected topic/subject</h2>",
+            summary = "Register a new scheme for the selected topic/subject")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Schema successfully registered."),
@@ -72,7 +75,8 @@ class KafkaMessageController {
         return ResponseEntity.ok(schemaId);
     }
 
-    @Operation(summary = "Get schema as json for the selected topic/subject")
+    @Operation(description = "<h2>Get schema as json for the selected topic/subject</h2>",
+            summary = "Get schema as json for the selected topic/subject")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Json successfully generated."),

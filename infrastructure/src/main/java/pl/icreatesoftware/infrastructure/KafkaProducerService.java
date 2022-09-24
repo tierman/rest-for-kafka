@@ -8,7 +8,6 @@ import io.confluent.kafka.schemaregistry.avro.AvroSchema;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.LogicalType;
 import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -17,7 +16,6 @@ import org.apache.avro.util.RandomData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import pl.icreatesoftware.Employee;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -28,7 +26,7 @@ public class KafkaProducerService {
 
     private final KafkaTemplate<UUID, GenericRecord> kafkaTemplate;
 
-    private static final List SCHEMA_PRIMITIVE_TYPES = List.of(
+    private static final List<Schema.Type> SCHEMA_PRIMITIVE_TYPES = List.of(
             Schema.Type.BOOLEAN,
             Schema.Type.INT,
             Schema.Type.LONG,
@@ -38,7 +36,7 @@ public class KafkaProducerService {
             Schema.Type.STRING
     );
 
-    private static final List SCHEMA_COMPLEX_TYPES = List.of(
+    private static final List<Schema.Type> SCHEMA_COMPLEX_TYPES = List.of(
             Schema.Type.RECORD,
             Schema.Type.ARRAY,
             Schema.Type.MAP,
@@ -52,6 +50,7 @@ public class KafkaProducerService {
     }
 
     public void sendGeneric(String topicName, String clientId, JsonObject json) {
+        //TODO: create kafka template dynamic, and paste there specific config like clientId, address etc.
         var key = UUID.randomUUID();
         var maxIdOfSchemVersion = 20;
         var schemaUrl = "http://localhost:8888/";
@@ -73,8 +72,6 @@ public class KafkaProducerService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        //kafkaTemplate.send("topic", key, );
-        //kafkaTemplate.send("topic1", key, toSend);
     }
 
     private void prepareMessageBasedOnJson(GenericRecord record, JsonObject json) {
