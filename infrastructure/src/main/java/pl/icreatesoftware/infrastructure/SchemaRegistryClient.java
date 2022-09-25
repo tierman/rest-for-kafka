@@ -19,11 +19,11 @@ public class SchemaRegistryClient {
         this.schemaRegistryConfig = schemaRegistryConfig;
     }
 
-    public Schema getNewestSchemaForSubject(String subjectName) {
+    public ParsedSchema getNewestSchemaForSubject(String subjectName) {
         return getSchemaForSubject(subjectName, null);
     }
 
-    public Schema getSchemaForSubject(String subjectName, Integer version) {
+    public ParsedSchema getSchemaForSubject(String subjectName, Integer version) {
         var registryClient = getCachedSchemaRegistryClient();
         subjectName = schemaRegistryConfig.modifyTopicNameIfNeeded(subjectName);
 
@@ -33,7 +33,7 @@ public class SchemaRegistryClient {
                     : version;
             SchemaMetadata schemaMetadata = registryClient.getSchemaMetadata(subjectName, latestVersion);
             ParsedSchema parsedSchema = registryClient.getSchemaById(schemaMetadata.getId());
-            return new Schema.Parser().parse(parsedSchema.toString());
+            return parsedSchema;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

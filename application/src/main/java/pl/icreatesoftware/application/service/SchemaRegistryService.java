@@ -21,7 +21,8 @@ public class SchemaRegistryService {
     }
 
     public String createJsonBasedOnLatestSchemaInSubject(String subjectName) {
-        Schema schema = schemaRegistryClient.getNewestSchemaForSubject(subjectName);
+        var parsedSchema = schemaRegistryClient.getNewestSchemaForSubject(subjectName);
+        var schema = new Schema.Parser().parse(parsedSchema.toString());
         StringBuilder jsonBuilder = new StringBuilder();
 
         for (Object o : new RandomData(schema, 1)) {

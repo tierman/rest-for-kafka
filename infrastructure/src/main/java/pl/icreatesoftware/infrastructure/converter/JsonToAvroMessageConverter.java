@@ -172,10 +172,13 @@ public class JsonToAvroMessageConverter {
     }
 
     private boolean isSelectedTypeInFieldSchema(Schema.Field schemaFieldToFillData, Schema.Type ... types) {
-        return schemaFieldToFillData
-                .schema()
-                .getTypes().stream()
-                .filter(fieldSchema -> List.of(types).contains(fieldSchema.getType())).count() == 1;
+        if (schemaFieldToFillData.schema().isUnion()) {
+            return schemaFieldToFillData
+                    .schema()
+                    .getTypes().stream()
+                    .filter(fieldSchema -> List.of(types).contains(fieldSchema.getType())).count() == 1;
+        }
+        return List.of(types).contains(schemaFieldToFillData.schema().getType());
     }
 
     private static boolean isDateTypeFieldSchema(Schema.Field schemaFieldToFillData) {
@@ -198,10 +201,15 @@ public class JsonToAvroMessageConverter {
     }
 
     private boolean isPrimitiveType(JsonElement jsonElement, Schema.Field schemaFieldToFillData) {
-        var isPrimitiveTypeInSchema = schemaFieldToFillData
-                .schema()
-                .getTypes().stream()
-                .filter(fieldSchema -> SCHEMA_PRIMITIVE_TYPES.contains(fieldSchema.getType())).count() == 1;
+        var isPrimitiveTypeInSchema = false;
+        if (schemaFieldToFillData.schema().isUnion()) {
+            isPrimitiveTypeInSchema = schemaFieldToFillData
+                    .schema()
+                    .getTypes().stream()
+                    .filter(fieldSchema -> SCHEMA_PRIMITIVE_TYPES.contains(fieldSchema.getType())).count() == 1;
+        } else {
+            isPrimitiveTypeInSchema = SCHEMA_PRIMITIVE_TYPES.contains(schemaFieldToFillData.schema().getType());
+        }
 
         return jsonElement.isJsonPrimitive() && isPrimitiveTypeInSchema;
     }
