@@ -1,6 +1,11 @@
 dependencies {
     implementation project(':infrastructure')
-    implementation project(':entrypoint')
+
+    implementation libs.spring.context
+    implementation libs.gson
+
+    implementation libs.lombok
+    annotationProcessor libs.lombok
 
     implementation libs.kafka.avro.serializer
     implementation libs.kafka.schema.registry.client

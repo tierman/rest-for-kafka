@@ -12,7 +12,6 @@ spring:
     properties:
       schema.registry.url: http://localhost:8888/
 
-
 springdoc:
   api-docs:
     enabled: true
@@ -21,3 +20,8 @@ springdoc:
 
 server:
   port: 8088
+
+rest-for-kafka:
+  schema.registry.url: http://localhost:8888/
+  schema.registry.subjects.value-suffix": TRUE
+

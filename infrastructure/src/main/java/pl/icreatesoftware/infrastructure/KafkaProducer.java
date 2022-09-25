@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.confluent.kafka.schemaregistry.ParsedSchema;
-import io.confluent.kafka.schemaregistry.avro.AvroSchema;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
 import lombok.extern.slf4j.Slf4j;
@@ -12,17 +11,16 @@ import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.util.RandomData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 
-@Service
+@Component
 @Slf4j
-public class KafkaProducerService {
+public class KafkaProducer {
 
     private final KafkaTemplate<UUID, GenericRecord> kafkaTemplate;
 
@@ -45,16 +43,16 @@ public class KafkaProducerService {
     );
 
     @Autowired
-    KafkaProducerService(KafkaTemplate<UUID, GenericRecord> kafkaTemplate) {
+    KafkaProducer(KafkaTemplate<UUID, GenericRecord> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendGeneric(String topicName, String clientId, JsonObject json) {
         //TODO: create kafka template dynamic, and paste there specific config like clientId, address etc.
         var key = UUID.randomUUID();
-        var maxIdOfSchemVersion = 20;
+        var maxIdOfSchemaVersion = 20;
         var schemaUrl = "http://localhost:8888/";
-        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, maxIdOfSchemVersion);
+        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, maxIdOfSchemaVersion);
         topicName = modifyTopicNameIfNeeded(topicName);
 
         SchemaMetadata schemaMetadata;
@@ -249,41 +247,4 @@ public class KafkaProducerService {
         return topic;
     }
 
-    public int registerSchema(String topicName, boolean normalize, String schema) {
-        var schemaUrl = "http://localhost:8888/";
-        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, 20);
-        ParsedSchema parsedSchema = new AvroSchema(schema);
-        topicName = modifyTopicNameIfNeeded(topicName);
-
-        int schemaId;
-        try {
-            schemaId = registryClient.register(topicName, parsedSchema, normalize);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return schemaId;
-    }
-
-    public String createJsonBasedOnLatestSchemaInSubject(String topicName) {
-        var maxIdOfSchemVersion = 20;
-        var schemaUrl = "http://localhost:8888/";
-        CachedSchemaRegistryClient registryClient = new CachedSchemaRegistryClient(schemaUrl, maxIdOfSchemVersion);
-        topicName = modifyTopicNameIfNeeded(topicName);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            var latestVersion = registryClient.getAllVersions(topicName).stream().max(Comparator.naturalOrder()).get();
-            SchemaMetadata schemaMetadata = registryClient.getSchemaMetadata(topicName, latestVersion);
-            ParsedSchema parsedSchema = registryClient.getSchemaById(schemaMetadata.getId());
-            Schema schema = new Schema.Parser().parse(parsedSchema.toString());
-
-            for (Object o : new RandomData(schema, 1)) {
-                stringBuilder.append(o);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return stringBuilder.toString();
-    }
 }
