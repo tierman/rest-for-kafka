@@ -3,6 +3,14 @@ spring:
     activate:
       on-profile:
         - dev
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            #redirect-uri: "http://localhost:8088/swagger-ui/index.html"
 
 springdoc:
   api-docs:
