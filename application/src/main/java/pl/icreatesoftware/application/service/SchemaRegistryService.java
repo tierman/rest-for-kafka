@@ -16,8 +16,8 @@ public class SchemaRegistryService {
         this.schemaRegistryClient = schemaRegistryClient;
     }
 
-    public int registerSchema(String subjectName, boolean normalize, String schema) {
-        return schemaRegistryClient.registerSchema(subjectName, normalize, schema);
+    public int registerSchema(String subjectName, String schema) {
+        return schemaRegistryClient.registerSchema(subjectName, schema);
     }
 
     public String createJsonBasedOnLatestSchemaInSubject(String subjectName) {

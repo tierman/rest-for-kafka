@@ -39,7 +39,7 @@ public class SchemaRegistryClient {
         }
     }
 
-    public int registerSchema(String subjectName, boolean normalize, String schema) {
+    public int registerSchema(String subjectName, String schema) {
         var registryClient = getCachedSchemaRegistryClient();
         subjectName = schemaRegistryConfig.modifyTopicNameIfNeeded(subjectName);
 
@@ -47,7 +47,7 @@ public class SchemaRegistryClient {
 
         int schemaId;
         try {
-            schemaId = registryClient.register(subjectName, parsedSchema, normalize);
+            schemaId = registryClient.register(subjectName, parsedSchema);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

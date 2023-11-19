@@ -40,16 +40,12 @@ class SchemaRegistryController {
                             "prod - use topic/subject - 'topic-1'",
                     example = "test-topic-1")
             @RequestParam String subject,
-            @Schema(type = "boolean",
-                    description = "The default is false. If you don't know what you should choose, leave false.",
-                    example = "false")
-            @RequestParam boolean normalize,
             @Schema(type = "string", example = "Paste schema from avro file with no changes")
             @RequestBody String body) {
 
         int schemaId = 0;
         try {
-            schemaId = schemaRegistryService.registerSchema(subject, normalize, body);
+            schemaId = schemaRegistryService.registerSchema(subject, body);
         } catch (Exception ex) {
             log.error(getExceptionMessage(ex));
             return ResponseEntity.internalServerError().body(getExceptionMessage(ex));

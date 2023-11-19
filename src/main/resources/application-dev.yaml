@@ -17,6 +17,9 @@ springdoc:
     enabled: true
     path: /api-docs
   show-actuator: true
+  swagger-ui:
+    path: /swagger-ui.html
+
 
 server:
   port: 8088
