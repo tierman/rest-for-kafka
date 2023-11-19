@@ -1,3 +1,4 @@
+/*
 package pl.icreatesoftware.config;
 
 import org.springframework.http.HttpHeaders;
@@ -42,3 +43,4 @@ class JwtTokenFilter extends OncePerRequestFilter {
         // Get user identity and set it on the spring security context
     }
 }
+*/

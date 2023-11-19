@@ -1,3 +1,4 @@
+/*
 package pl.icreatesoftware.config;
 
 import org.springframework.context.annotation.Bean;
@@ -39,3 +40,4 @@ class SecurityConfig {
         return http.build();
     }
 }
+*/
