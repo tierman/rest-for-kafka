@@ -6,8 +6,11 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Component;
 import pl.icreatesoftware.infrastructure.config.KafkaProducerConfig;
 import pl.icreatesoftware.infrastructure.converter.JsonToAvroMessageConverter;
@@ -22,13 +25,17 @@ public class KafkaProducer {
     private final JsonToAvroMessageConverter jsonToAvroMessageConverter;
     private final KafkaProducerConfig kafkaProducerConfig;
 
+    private final ApplicationContext context;
+
     @Autowired
     KafkaProducer(SchemaRegistryClient schemaRegistryClient,
                   JsonToAvroMessageConverter jsonToAvroMessageConverter,
-                  KafkaProducerConfig kafkaProducerConfig) {
+                  KafkaProducerConfig kafkaProducerConfig,
+                  ApplicationContext context) {
         this.kafkaProducerConfig = kafkaProducerConfig;
         this.schemaRegistryClient = schemaRegistryClient;
         this.jsonToAvroMessageConverter = jsonToAvroMessageConverter;
+        this.context = context;
     }
 
     public void sendGeneric(String subjectName, String clientId, JsonObject json) {
@@ -46,10 +53,28 @@ public class KafkaProducer {
         GenericRecord rootMessage = new GenericData.Record(schema);
         jsonToAvroMessageConverter.prepareMessageBasedOnJson(rootMessage, json);
 
-        var kafkaTemplate =  new KafkaTemplate<>(kafkaProducerConfig.producerFactory("localhost:29092", null, null));
+        var kafkaTemplate = getKafkaTemplate(clientId);
 
         kafkaTemplate.send(subjectName, key, rootMessage);
+    }
 
-        kafkaTemplate.destroy();
+    private KafkaTemplate getKafkaTemplate(String clientId) {
+        KafkaTemplate template = null;
+
+        try {
+            template = (KafkaTemplate) context.getBean("kafkaTemplate");
+            template.getProducerFactory().updateConfigs(
+                    kafkaProducerConfig.producerConfigWithCustomChanges(
+                            null,
+                            clientId,
+                            null));
+            template.getProducerFactory().reset();
+        } catch (NoSuchBeanDefinitionException ex) {
+            log.debug("Cannot find Kafka template in context: ", ex);
+            template = new KafkaTemplate<>(
+                    kafkaProducerConfig.buildProducerFactory(null, clientId, null));
+        }
+
+        return template;
     }
 }

@@ -58,7 +58,10 @@ public class JsonToAvroMessageConverter {
         });
     }
 
-    private void copyValuesFromJsonToMessage(JsonElement jsonElement, String jsonFieldName, Schema.Field schemaFieldToFillData, GenericRecord record) {
+    private void copyValuesFromJsonToMessage(JsonElement jsonElement,
+                                             String jsonFieldName,
+                                             Schema.Field schemaFieldToFillData,
+                                             GenericRecord record) {
         if (isPrimitiveType(jsonElement, schemaFieldToFillData)) {
             addPrimitive(record, jsonFieldName, jsonElement, schemaFieldToFillData);
         } else if (isComplexType(jsonElement, schemaFieldToFillData)) {
@@ -68,7 +71,10 @@ public class JsonToAvroMessageConverter {
         }
     }
 
-    private void addComplex(GenericRecord record, String jsonFieldName, JsonElement jsonElement, Schema.Field schemaFieldToFillData) {
+    private void addComplex(GenericRecord record,
+                            String jsonFieldName,
+                            JsonElement jsonElement,
+                            Schema.Field schemaFieldToFillData) {
         if (jsonElement.isJsonObject()) {
             log.debug("complex type - object");
 
@@ -197,7 +203,7 @@ public class JsonToAvroMessageConverter {
                 .getTypes().stream()
                 .filter(fieldSchema -> SCHEMA_COMPLEX_TYPES.contains(fieldSchema.getType())).count() == 1;
 
-        return jsonElement.isJsonObject() && isComplexTypeInSchema;
+        return jsonElement.isJsonObject() && (isComplexTypeInSchema || schemaFieldToFillData.schema().isUnion());
     }
 
     private boolean isPrimitiveType(JsonElement jsonElement, Schema.Field schemaFieldToFillData) {

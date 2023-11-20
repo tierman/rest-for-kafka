@@ -28,7 +28,7 @@ rest-for-kafka:
   schema.registry.url: http://localhost:8081/
   schema.registry.subjects.value-suffix": TRUE
   kafka:
-    bootstrap-servers: ${REST_FOR_KAFKA_BOOTSTRAP_SERVERS:localhost\:9092}
+    bootstrap-servers: localhost:9092
     producer:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       key-serializer: org.apache.kafka.common.serialization.UUIDSerializer

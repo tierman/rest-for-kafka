@@ -32,10 +32,10 @@ class SchemaRegistryController {
                     description = "Error when parsing schema.",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
-    @PostMapping("/subject/{subject}/normalize/{normalize}/register")
+    @PostMapping("/subject/{subject}/register")
     public ResponseEntity<?> registerSchemaOnSubject(
             @Schema(type = "string",
-                    description = "For envirnoment:<br> " +
+                    description = "For environment:<br> " +
                             "test - use topic/subject - 'test-topic-1'<br>" +
                             "prod - use topic/subject - 'topic-1'",
                     example = "test-topic-1")
@@ -65,7 +65,7 @@ class SchemaRegistryController {
     @GetMapping("/subject/{subject}/json")
     public ResponseEntity<?> getRegisteredSchemaAsJsonForSubject(
             @Schema(type = "string",
-                    description = "For envirnoment:<br> " +
+                    description = "For environment:<br> " +
                             "test - use topic/subject - 'test-topic-1'<br>" +
                             "prod - use topic/subject - 'topic-1'",
                     example = "test-topic-1")

@@ -39,9 +39,10 @@ public class KafkaProducerConfig {
         return config;
     }
 
-    public ProducerFactory<UUID, Object> producerFactory(String bootstrapServers,
-                                                         String clientId,
-                                                         String schemaRegistryUrl) {
+    public Map<String, Object> producerConfigWithCustomChanges(
+            String bootstrapServers,
+            String clientId,
+            String schemaRegistryUrl) {
         var producerConfig = producerConfigs();
 
         if (bootstrapServers != null && !bootstrapServers.isBlank()) {
@@ -56,6 +57,16 @@ public class KafkaProducerConfig {
             producerConfig.put(SCHEMA_REGISTRY_URL, schemaRegistryUrl);
         }
 
-        return new DefaultKafkaProducerFactory<>(producerConfig);
+        return producerConfig;
+    }
+
+    public ProducerFactory<UUID, Object> buildProducerFactory(
+            String bootstrapServers,
+            String clientId,
+            String schemaRegistryUrl) {
+        return new DefaultKafkaProducerFactory<>(producerConfigWithCustomChanges(
+                bootstrapServers,
+                clientId,
+                schemaRegistryUrl));
     }
 }

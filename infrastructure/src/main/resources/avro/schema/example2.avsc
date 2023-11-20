@@ -1,0 +1,26 @@
+[
+  {
+    "type": "record",
+    "namespace": "pl.icreatesoftware",
+    "name": "A",
+    "fields": [
+      {"name": "city1", "type": ["string", "null"]}
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "pl.icreatesoftware",
+    "name": "B",
+    "fields": [
+      {"name": "city2", "type": ["string", "null"]}
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "pl.icreatesoftware",
+    "name": "C",
+    "fields": [
+      {"name": "city", "type": ["A", "B"]}
+    ]
+  }
+]
