@@ -79,7 +79,15 @@ public class JsonToAvroMessageConverter {
             log.debug("complex type - object");
 
             Optional<Schema> optionalSchema = schemaFieldToFillData.schema().getTypes().stream()
-                    .filter(schema -> schema.getType().equals(Schema.Type.RECORD)).findFirst();
+                    .filter(schema ->
+                        schema.getType().equals(Schema.Type.RECORD)
+                                && schema.getField(jsonElement
+                                .getAsJsonObject()
+                                .keySet()
+                                .stream()
+                                .findFirst()
+                                .get()) != null)
+                    .findFirst();
 
             if (optionalSchema.isEmpty()) {
                 log.error("Cannot find correct sub schema for: {}", jsonFieldName);

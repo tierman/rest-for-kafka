@@ -12,6 +12,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Component;
+import pl.icreatesoftware.A;
+import pl.icreatesoftware.B;
+import pl.icreatesoftware.C;
 import pl.icreatesoftware.infrastructure.config.KafkaProducerConfig;
 import pl.icreatesoftware.infrastructure.converter.JsonToAvroMessageConverter;
 
@@ -54,6 +57,15 @@ public class KafkaProducer {
         jsonToAvroMessageConverter.prepareMessageBasedOnJson(rootMessage, json);
 
         var kafkaTemplate = getKafkaTemplate(clientId);
+
+        //fixme: do usuniecia - to tylko dla porownania w przypadku pola w dwoch roznych typach.
+        C c1 = C.newBuilder()
+                .setCity(B.newBuilder().setCity2("bbbb").build())
+                .build();
+
+        C c2 = C.newBuilder()
+                .setCity(A.newBuilder().setCity1("aaaa").build())
+                .build();
 
         kafkaTemplate.send(subjectName, key, rootMessage);
     }

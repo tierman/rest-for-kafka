@@ -25,7 +25,7 @@ public class SchemaRegistryService {
         var schema = new Schema.Parser().parse(parsedSchema.toString());
         StringBuilder jsonBuilder = new StringBuilder();
 
-        for (Object o : new RandomData(schema, 1)) {
+        for (Object o : new RandomData(schema, 10, true)) {
             jsonBuilder.append(o);
         }
 
